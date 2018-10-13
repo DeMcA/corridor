@@ -31,6 +31,10 @@
     left: 5px;
 }
 
+.wall {
+    background: black
+}
+
 .player1 {
     background: blue;
 }

@@ -5,6 +5,8 @@
      (verticalClicked)="onVerticalClicked($event)"
      [idx]="i" 
      [location]="getSquareLocation(i)"
-     [player] = "square"
+     [player]="square"
+     [hwall]="horizontalWalls[i]"
+     [vwall]="verticalWalls[i]"
  ></app-board-square>
 </div>

@@ -13,9 +13,14 @@ export class BoardComponent implements OnInit {
   verticalWalls: Array<number>
   horizontalWalls: Array<number>
   readyToMove: boolean
+  verticalWalls: Array<number>
+  horizontalWalls: Array<number>
+
 
   constructor() {
     this.squares  = Array<number>(81).fill(0);
+    this.verticalWalls  = Array<number>(81).fill(0);
+    this.horizontalWalls  = Array<number>(81).fill(0);
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;
@@ -60,9 +65,15 @@ export class BoardComponent implements OnInit {
   }
 
   onHorizontaliClicked(sqIdx: number) {
+    this.horizontalWalls[sqIdx] = 1
+    this.horizontalWalls[sqIdx+1] = 1
+    this.currentTurn++
   }
 
   onVerticalClicked(sqIdx: number) {
+    this.verticalWalls[sqIdx] = 1
+    this.verticalWalls[sqIdx+9] = 1
+    this.currentTurn++
   }
 
   getSquareLocation(idx) {

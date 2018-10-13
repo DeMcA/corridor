@@ -10,6 +10,8 @@ export class BoardSquareComponent implements OnInit {
   @Input() idx: number;
   @Input() location;
   @Input() player;
+  @Input() vwall
+  @Input() hwall
 
   @Output() squareClicked = new EventEmitter<number>();
   @Output() horizontalClicked = new EventEmitter<number>();
