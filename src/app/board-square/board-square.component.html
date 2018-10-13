@@ -1,1 +1,4 @@
-<div [class]="getClass()" (click)="click()" ></div>
+<div [class]="getClass()" (click)="click()" >
+<div *ngIf="!location.top" class="horizontal" (click)="horizontalClick()"></div>
+<div *ngIf="!location.left" class="vertical" (click)="verticalClick()"></div>
+</div>

@@ -6,3 +6,15 @@
     outline: 1px solid black;
 
 }
+
+.horizontal {
+    width: 45px;
+    height: 5px;
+    outline: 1px solid blue;
+}
+
+.vertical {
+    width: 5px;
+    height: 45px;
+    outline: 1px solid blue;
+}

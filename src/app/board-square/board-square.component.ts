@@ -7,10 +7,10 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 })
 export class BoardSquareComponent implements OnInit {
 
-    @Input() idx: number;
-    @Input() location
+  @Input() idx: number;
+  @Input() location
 
-    @Output() squareClicked = new EventEmitter<number>();
+  @Output() squareClicked = new EventEmitter<number>();
 
   constructor() { }
 
@@ -22,12 +22,21 @@ export class BoardSquareComponent implements OnInit {
     this.squareClicked.emit(this.idx)
   }
 
-    getClass() {
-        return 'square '+Object.keys(this.location).filter(
-            (key) => this.location[key]
-        ).join(' ')
-    }
+  verticalClick() {
+    console.log("vertical click in square")
+   }
 
-    
- 
+
+  horizontalClick() {
+    console.log("horizontal click in square")
+  }
+
+  getClass() {
+    return 'square '+Object.keys(this.location).filter(
+      (key) => this.location[key]
+    ).join(' ')
+  }
+
+
+
 }
