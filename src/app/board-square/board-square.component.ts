@@ -12,11 +12,12 @@ export class BoardSquareComponent implements OnInit {
   @Input() player;
 
   @Output() squareClicked = new EventEmitter<number>();
+  @Output() horizontalClicked = new EventEmitter<number>();
+  @Output() verticalClicked = new EventEmitter<number>();
 
   constructor() { }
 
   ngOnInit() {
-    console.log(this.player)
   }
 
   click() {
@@ -26,11 +27,13 @@ export class BoardSquareComponent implements OnInit {
 
   verticalClick() {
     console.log("vertical click in square")
-   }
+    this.verticalClicked.emit(this.idx)
+  }
 
 
   horizontalClick() {
     console.log("horizontal click in square")
+    this.horizontalClicked.emit(this.idx)
   }
 
   // Don't actually need this for anything, will control in board componenet

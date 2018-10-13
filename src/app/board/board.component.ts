@@ -8,21 +8,61 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BoardComponent implements OnInit {
 
   squares: Array<number>;
-  player1
-  player2
+  currentTurn: number
+  lastClicked: null|number
+  verticalWalls: Array<number>
+  horizontalWalls: Array<number>
+  readyToMove: boolean
 
   constructor() {
     this.squares  = Array<number>(81).fill(0);
     this.squares[4] = 1;
     this.squares[76] = 2;
+    this.currentTurn = 0;
+    this.pieces = [4,76]
+    this.lastClicked = null;
+    this.readyToMove = false;
   }
+
 
   ngOnInit() {
   }
 
+  get activePiece() { 
+    let x = this.pieces[this.currentTurn % 2 ]
+     // console.log("active piece",x)
+    return x
+  }
+
+  get currentPlayer() {
+    let x = this.currentTurn % 2
+    // console.log("current PLayer", x)
+    return x+1
+  }
+
   onSquareClicked(sqIdx: number){
-    console.log("square passed to board")
-    console.log(sqIdx)
+    // If clicked on sqare containing piece of active player
+    // If previously clicked on active piece then move to sqare
+    if (this.readyToMove) {
+      // make current square blank
+      this.squares[this.activePiece] = 0
+      // move marker for current player to new square
+      this.squares[sqIdx] = this.currentPlayer 
+      this.readyToMove = false
+      this.pieces[this.currentTurn%2] = sqIdx
+    // console.log("turn", this.currentTurn, "Idx: ", sqIdx, "last clicked: ", this.lastClicked, "ready?", this.readyToMove, "active piece: ", this.activePiece)
+      this.currentTurn++
+    }
+    if (sqIdx === this.activePiece) {
+      this.readyToMove = true
+    }
+    this.lastClicked = sqIdx
+  }
+
+  onHorizontaliClicked(sqIdx: number) {
+  }
+
+  onVerticalClicked(sqIdx: number) {
   }
 
   getSquareLocation(idx) {

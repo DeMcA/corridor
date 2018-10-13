@@ -1,6 +1,7 @@
 <div [class]="getClass()" (click)="click()" >
 <div *ngIf="player" class="piece"
   [ngClass]="{'player1':player==1,'player2':player==2}" (click)="pieceClick()"></div>
-<div *ngIf="!location.top" class="horizontal" (click)="horizontalClick()"></div>
+<div *ngIf="!location.top" class="horizontal"
+  (click)="horizontalClick()"></div>
 <div *ngIf="!location.left" class="vertical" (click)="verticalClick()"></div>
 </div>
