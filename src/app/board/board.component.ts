@@ -8,9 +8,13 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BoardComponent implements OnInit {
 
   squares: Array<number>;
+  player1
+  player2
 
   constructor() {
     this.squares  = Array<number>(81).fill(0);
+    this.squares[4] = 1;
+    this.squares[76] = 2;
   }
 
   ngOnInit() {

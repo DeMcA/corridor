@@ -8,13 +8,15 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 export class BoardSquareComponent implements OnInit {
 
   @Input() idx: number;
-  @Input() location
+  @Input() location;
+  @Input() player;
 
   @Output() squareClicked = new EventEmitter<number>();
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.player)
   }
 
   click() {
@@ -29,6 +31,11 @@ export class BoardSquareComponent implements OnInit {
 
   horizontalClick() {
     console.log("horizontal click in square")
+  }
+
+  // Don't actually need this for anything, will control in board componenet
+  pieceClick() {
+    console.log("click player ", this.player)
   }
 
   getClass() {

@@ -1,4 +1,5 @@
 .square { 
+    position: relative;
     width: 50px;
     height: 50px;
     background: white;
@@ -17,4 +18,23 @@
     width: 5px;
     height: 45px;
     outline: 1px solid blue;
+}
+
+.piece {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    top: 5px;
+    left: 5px;
+}
+
+.player1 {
+    background: blue;
+}
+
+.player2 {
+    background: red;
 }
