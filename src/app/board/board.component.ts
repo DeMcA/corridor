@@ -7,22 +7,16 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
-  squares: Array<number>;
+  squares: Array<number>; // represents the board. 0 if no piece, 1 for player 1, 2 for player2
   currentTurn: number
-  lastClicked: null|number
-  readyToMove: boolean
-  verticalWalls: Array<number>
+  verticalWalls: Array<number> // 0 for no wall, > 0 wall. idx equals if same wall
   horizontalWalls: Array<number>
-  pieces
   players
-  player
-  playerIdx: number
 
   selectedPiece: null|string
 
   constructor() {
     this.squares  = Array<number>(81).fill(0);
-    // represents the board. 0 if no piece, 1 for player 1, 2 for player2
     this.verticalWalls  = Array<number>(81).fill(0);
     this.horizontalWalls  = Array<number>(81).fill(0);
     this.squares[4] = 1;
@@ -42,13 +36,10 @@ export class BoardComponent implements OnInit {
       }
     ]
 
-
   }
-
 
   ngOnInit() {
   }
-
 
   get player() {
     return (this.players[this.currentTurn%2])
@@ -60,8 +51,7 @@ export class BoardComponent implements OnInit {
 
   // Using "onXXXClicked()" to refer to events from child componenet
   onSquareClicked(sqIdx: number) {
-    console.log("idx:",sqIdx, "player", this.player, "selected", this.selectedPiece)
-    if (this.selectedPiece === "player"  {
+    if (this.selectedPiece === "player")  {
       this.moveCurrentPlayer(sqIdx)
     }
     else if (sqIdx === this.player.position) {
@@ -73,8 +63,8 @@ export class BoardComponent implements OnInit {
   onHorizontaliClicked(sqIdx: number) {
     if (this.selectedPiece === "wall") {
       if(sqIdx % 9 === 8 ) { sqIdx-- }
-      this.horizontalWalls[sqIdx] = 1
-      this.horizontalWalls[sqIdx+1] = 1
+      this.horizontalWalls[sqIdx] = this.wallLabel
+      this.horizontalWalls[sqIdx+1] = this.wallLabel
       this.player.walls--;
       this.completeTurn();
     }
@@ -83,11 +73,27 @@ export class BoardComponent implements OnInit {
   onVerticalClicked(sqIdx: number) {
     if (this.selectedPiece === "wall") {
       if(sqIdx > 71){ sqIdx = sqIdx - 9 }
-      this.verticalWalls[sqIdx] = 1
-      this.verticalWalls[sqIdx+9] = 1
-      this.player.walls--;
-      this.completeTurn();
+      if(this.legalVerticalWallMove(sqIdx) ){
+        this.verticalWalls[sqIdx] = this.wallLabel
+        this.verticalWalls[sqIdx+9] = this.wallLabel
+        this.player.walls--;
+        this.completeTurn();
+      }
+      else(window.alert("can't go there"))
     }
+  }
+
+  // ensure unique index for each wall in wall arrays
+  get wallLabel() {
+    return this.player.walls*this.player.key
+  }
+
+  legalVerticalWallMove(idx){
+    return this.player.walls > 0
+      && !this.verticalWalls[idx]
+      && !this.verticalWalls[idx+9]
+      && !this.horizontalWalls[idx+9]
+      || this.horizontalWalls[idx+9] !== this.horizontalWalls[idx+8]
   }
 
   moveCurrentPlayer(idx) {
@@ -98,7 +104,6 @@ export class BoardComponent implements OnInit {
       // Update player information:
       this.player.position = idx
       this.completeTurn();
-
     }
   }
 
