@@ -3,14 +3,16 @@
      (squareClicked)="onSquareClicked($event)"
      (horizontalClicked)="onHorizontaliClicked($event)"
      (verticalClicked)="onVerticalClicked($event)"
+     (pieceClicked)="onPieceClicked($event)"
      [idx]="i" 
      [location]="getSquareLocation(i)"
-     [player]="square"
+     [player]=square
      [hwall]="horizontalWalls[i]"
      [vwall]="verticalWalls[i]"
  ></app-board-square>
 </div>
-<h2> Current Player: Player {{currentPlayer}}</h2>
+<button (click)="wallSelectorClicked()">select wall</button>
+<h2> Current Player: Player {{player.key}}</h2>
 <h2> Walls: </h2>
-Player 1: {{walls[0]}}
-Player 2: {{walls[1]}}
+Player 1: {{players[0].walls}}
+Player 2: {{players[1].walls}}

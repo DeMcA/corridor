@@ -9,13 +9,14 @@ export class BoardSquareComponent implements OnInit {
 
   @Input() idx: number;
   @Input() location;
-  @Input() player;
+  @Input() player: number;
   @Input() vwall
   @Input() hwall
 
   @Output() squareClicked = new EventEmitter<number>();
   @Output() horizontalClicked = new EventEmitter<number>();
   @Output() verticalClicked = new EventEmitter<number>();
+  // @Output() pieceClicked = new EventEmitter<number>();
 
   constructor() { }
 
@@ -38,17 +39,11 @@ export class BoardSquareComponent implements OnInit {
     this.horizontalClicked.emit(this.idx)
   }
 
-  // Don't actually need this for anything, will control in board componenet
+  // // Don't actually need this for anything, can deduce in board component
   pieceClick() {
-    console.log("click player ", this.player)
+  //   console.log("click player ", this.player)
+  //   this.pieceClicked(this.player)
   }
-
-  // getClass() {
-  //   return 'square '+Object.keys(this.location).filter(
-  //     (key) => this.location[key]
-  //   ).join(' ')
-  // }
-
 
 
 }

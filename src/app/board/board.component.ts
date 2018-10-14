@@ -15,7 +15,10 @@ export class BoardComponent implements OnInit {
   horizontalWalls: Array<number>
   pieces
   players
+  player
+  playerIdx: number
 
+  selectedPiece: null|string
 
   constructor() {
     this.squares  = Array<number>(81).fill(0);
@@ -25,11 +28,7 @@ export class BoardComponent implements OnInit {
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;
-    this.pieces = [4,76]
-    this.walls = [10,10]
-    this.lastClicked = null;
-    this.readyToMove = false;
-    // not using players object but might be best to make an interface for this
+    this.selectedPiece = null;
     this.players = [
       {
         key: 1,
@@ -50,48 +49,72 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
   }
 
-  get activePiece() { 
-    let x = this.pieces[this.currentTurn % 2 ]
-    // let y = this.players
-    // console.log("active piece",x)
-    return x
+
+  get player() {
+    return (this.players[this.currentTurn%2])
+  } 
+
+  wallSelectorClicked() {
+    this.selectedPiece = "wall";
   }
 
-  get currentPlayer() {
-    let x = this.currentTurn % 2
-    // console.log("current PLayer", x)
-    return x+1
-  }
-
-  onSquareClicked(sqIdx: number){
-    // If clicked on sqare containing piece of active player
-    // If previously clicked on active piece then move to sqare
-    if (this.readyToMove) {
-      // make current square blank
-      this.squares[this.activePiece] = 0
-      // move marker for current player to new square
-      this.squares[sqIdx] = this.currentPlayer 
-      this.readyToMove = false
-      this.pieces[this.currentTurn%2] = sqIdx
-      // console.log("turn", this.currentTurn, "Idx: ", sqIdx, "last clicked: ", this.lastClicked, "ready?", this.readyToMove, "active piece: ", this.activePiece)
-      this.currentTurn++
+  // Using "onXXXClicked()" to refer to events from child componenet
+  onSquareClicked(sqIdx: number) {
+    console.log("idx:",sqIdx, "player", this.player, "selected", this.selectedPiece)
+    if (this.selectedPiece === "player"  {
+      this.moveCurrentPlayer(sqIdx)
     }
-    if (sqIdx === this.activePiece) {
-      this.readyToMove = true
+    else if (sqIdx === this.player.position) {
+      this.selectedPiece = "player"
     }
-    this.lastClicked = sqIdx
   }
-
+  
+  // TODO: DRY: Should I use a single emitter for wallClick and pass type?
   onHorizontaliClicked(sqIdx: number) {
-    this.horizontalWalls[sqIdx] = 1
-    this.horizontalWalls[sqIdx+1] = 1
-    this.currentTurn++
+    if (this.selectedPiece === "wall") {
+      if(sqIdx % 9 === 8 ) { sqIdx-- }
+      this.horizontalWalls[sqIdx] = 1
+      this.horizontalWalls[sqIdx+1] = 1
+      this.player.walls--;
+      this.completeTurn();
+    }
   }
 
   onVerticalClicked(sqIdx: number) {
-    this.verticalWalls[sqIdx] = 1
-    this.verticalWalls[sqIdx+9] = 1
+    if (this.selectedPiece === "wall") {
+      if(sqIdx > 71){ sqIdx = sqIdx - 9 }
+      this.verticalWalls[sqIdx] = 1
+      this.verticalWalls[sqIdx+9] = 1
+      this.player.walls--;
+      this.completeTurn();
+    }
+  }
+
+  moveCurrentPlayer(idx) {
+    if (this.isLegalPlayerMove) {
+      // Update sqaures array with new position:
+      this.squares[this.player.position] = 0;
+      this.squares[idx] = this.player.key;
+      // Update player information:
+      this.player.position = idx
+      this.completeTurn();
+
+    }
+  }
+
+  completeTurn() {
     this.currentTurn++
+    this.selectedPiece = null
+  }
+
+  // TODO
+  get isLegalPlayerMove(){
+    return true
+  }
+
+  // TODO
+  get isLegalWallMove(){
+    return true
   }
 
   getSquareLocation(idx) {
