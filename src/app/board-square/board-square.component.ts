@@ -43,11 +43,11 @@ export class BoardSquareComponent implements OnInit {
     console.log("click player ", this.player)
   }
 
-  getClass() {
-    return 'square '+Object.keys(this.location).filter(
-      (key) => this.location[key]
-    ).join(' ')
-  }
+  // getClass() {
+  //   return 'square '+Object.keys(this.location).filter(
+  //     (key) => this.location[key]
+  //   ).join(' ')
+  // }
 
 
 

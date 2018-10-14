@@ -10,23 +10,40 @@ export class BoardComponent implements OnInit {
   squares: Array<number>;
   currentTurn: number
   lastClicked: null|number
-  verticalWalls: Array<number>
-  horizontalWalls: Array<number>
   readyToMove: boolean
   verticalWalls: Array<number>
   horizontalWalls: Array<number>
+  pieces
+  players
 
 
   constructor() {
     this.squares  = Array<number>(81).fill(0);
+    // represents the board. 0 if no piece, 1 for player 1, 2 for player2
     this.verticalWalls  = Array<number>(81).fill(0);
     this.horizontalWalls  = Array<number>(81).fill(0);
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;
     this.pieces = [4,76]
+    this.walls = [10,10]
     this.lastClicked = null;
     this.readyToMove = false;
+    // not using players object but might be best to make an interface for this
+    this.players = [
+      {
+        key: 1,
+        walls: 10,
+        position: 4
+      },
+      {
+        key: 2,
+        walls: 10,
+        position: 76
+      }
+    ]
+
+
   }
 
 
@@ -35,7 +52,8 @@ export class BoardComponent implements OnInit {
 
   get activePiece() { 
     let x = this.pieces[this.currentTurn % 2 ]
-     // console.log("active piece",x)
+    // let y = this.players
+    // console.log("active piece",x)
     return x
   }
 
@@ -55,7 +73,7 @@ export class BoardComponent implements OnInit {
       this.squares[sqIdx] = this.currentPlayer 
       this.readyToMove = false
       this.pieces[this.currentTurn%2] = sqIdx
-    // console.log("turn", this.currentTurn, "Idx: ", sqIdx, "last clicked: ", this.lastClicked, "ready?", this.readyToMove, "active piece: ", this.activePiece)
+      // console.log("turn", this.currentTurn, "Idx: ", sqIdx, "last clicked: ", this.lastClicked, "ready?", this.readyToMove, "active piece: ", this.activePiece)
       this.currentTurn++
     }
     if (sqIdx === this.activePiece) {
