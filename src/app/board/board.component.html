@@ -8,8 +8,8 @@
      [player]=square
  ></app-board-square>
 
-
-<app-board-wall [wall]="wall" *ngFor="let wall of horizontalWalls; let i = index" [idx]="i" ></app-board-wall>
+<app-board-wall *ngFor="let wall of horizontalWalls; let i = index" [wall]="wall" [idx]="i" ></app-board-wall>
+<app-board-wall-slot (click)="onHorizontalClicked(i)" [wall]="slot" *ngFor="let slot of horizontalWallSlots; let i = index" [idx]="i" ></app-board-wall-slot>
 </div>
 
 <button (click)="wallSelectorClicked()">select wall</button>

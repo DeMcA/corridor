@@ -11,6 +11,7 @@ export class BoardComponent implements OnInit {
   currentTurn: number
   verticalWalls: Array<number> // 0 for no wall, > 0 wall. idx equals if same wall
   horizontalWalls: Array<number>
+  horizontalWallSlots: Array<number>
   players
 
   selectedPiece: null|string
@@ -18,7 +19,8 @@ export class BoardComponent implements OnInit {
   constructor() {
     this.squares  = Array<number>(81).fill(0);
     this.verticalWalls  = Array<number>(81).fill(0);
-    this.horizontalWalls  = Array<number>(72).fill(1);
+    this.horizontalWalls  = Array<number>(64).fill(0);
+    this.horizontalWallSlots = Array<number>(72).fill(0);
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;
@@ -60,14 +62,19 @@ export class BoardComponent implements OnInit {
   }
   
   // TODO: DRY: Should I use a single emitter for wallClick and pass type?
-  onHorizontaliClicked(sqIdx: number) {
-    if (this.selectedPiece === "wall") {
+  onHorizontalClicked(sqIdx: number) {
+      console.log("horizontal wall clicked and received by board", sqIdx)
       if(sqIdx % 9 === 8 ) { sqIdx-- }
-      this.horizontalWalls[sqIdx] = this.wallLabel
-      this.horizontalWalls[sqIdx+1] = this.wallLabel
-      this.player.walls--;
-      this.completeTurn();
-    }
+      let idx = sqIdx - Math.floor(sqIdx/9)
+      console.log(idx)
+      this.horizontalWalls[idx] = 1; // or wallLabel (or anything truthy)
+    // if (this.selectedPiece === "wall") {
+      // this.horizontalWalls[sqIdx] = this.wallLabel
+      // this.horizontalWalls[sqIdx+1] = this.wallLabel
+      this.player.walls-- ;
+      this.currentTurn++ ;
+      // this.completeTurn();
+    // }
   }
 
   onVerticalClicked(sqIdx: number) {
@@ -84,6 +91,7 @@ export class BoardComponent implements OnInit {
   }
 
   // ensure unique index for each wall in wall arrays
+  // Not needed if using separate len 64 wall arrays.
   get wallLabel() {
     return this.player.walls*this.player.key
   }
@@ -109,7 +117,8 @@ export class BoardComponent implements OnInit {
 
   completeTurn() {
     this.currentTurn++
-    this.selectedPiece = null
+    this.selectedPiece = null 
+  // Might remove piece Selection -> automatically play wall if click on wall and piece if click on square
   }
 
   // TODO

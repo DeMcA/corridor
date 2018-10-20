@@ -8,7 +8,6 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 export class BoardWallComponent implements OnInit {
 
   @Input() idx
-  @Output() horizontalClicked = new EventEmitter<number>();
   @Input() wall
 
   topDistance: number;
@@ -18,15 +17,8 @@ export class BoardWallComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.topDistance = 45+50*Math.floor(this.idx/9);
-    this.leftDistance = 5+50*(this.idx % 9)
-    // console.log(this.idx)
+    this.topDistance = 45+50*Math.floor(this.idx/8);
+    this.leftDistance = 5+50*(this.idx % 8)
   }
-
-  horizontalClick() {
-    console.log("horizontal click in square")
-    this.horizontalClicked.emit(this.idx)
-  }
-
 
 }

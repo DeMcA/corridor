@@ -1,8 +1,8 @@
 .horizontal {
   position: absolute;
-  width: 90px;
+  width: 40px;
   height: 10px;
-  outline: 1px solid red;
+  outline: 1px solid blue;
 }
 
 
