@@ -1,15 +1,16 @@
 .square { 
     position: relative;
-    width: 50px;
-    height: 50px;
-    background: white;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px 5px;
+    background: lightgrey;
     float: left;
     outline: 1px solid black;
 
 }
 
 .horizontal {
-    width: 45px;
+    width: 4px;
     height: 5px;
     outline: 1px solid blue;
 }
@@ -22,18 +23,15 @@
 
 .piece {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-    top: 5px;
-    left: 5px;
+    width: 36px;
+    height: 36px;
+    -webkit-border-radius: 18px;
+    -moz-border-radius: 18px;
+    border-radius: 18px;
+    top: 2px;
+    left: 2px;
 }
 
-.wall {
-    background: black
-}
 
 .player1 {
     background: blue;

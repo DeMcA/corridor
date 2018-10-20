@@ -1,16 +1,17 @@
 <div class="board">
+
 <app-board-square *ngFor="let square of squares; let i = index" 
      (squareClicked)="onSquareClicked($event)"
-     (horizontalClicked)="onHorizontaliClicked($event)"
-     (verticalClicked)="onVerticalClicked($event)"
      (pieceClicked)="onPieceClicked($event)"
      [idx]="i" 
      [location]="getSquareLocation(i)"
      [player]=square
-     [hwall]="horizontalWalls[i]"
-     [vwall]="verticalWalls[i]"
  ></app-board-square>
+
+
+<app-board-wall [wall]="wall" *ngFor="let wall of horizontalWalls; let i = index" [idx]="i" ></app-board-wall>
 </div>
+
 <button (click)="wallSelectorClicked()">select wall</button>
 <h2> Current Player: Player {{player.key}}</h2>
 <h2> Walls: </h2>

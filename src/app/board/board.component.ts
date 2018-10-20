@@ -18,7 +18,7 @@ export class BoardComponent implements OnInit {
   constructor() {
     this.squares  = Array<number>(81).fill(0);
     this.verticalWalls  = Array<number>(81).fill(0);
-    this.horizontalWalls  = Array<number>(81).fill(0);
+    this.horizontalWalls  = Array<number>(72).fill(1);
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;

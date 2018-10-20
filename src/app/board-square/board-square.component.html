@@ -1,10 +1,4 @@
 <div class="square" (click)="click()" >
 <div *ngIf="player" class="piece"
   [ngClass]="{'player1':player==1,'player2':player==2}" (click)="pieceClick()"></div>
-<div *ngIf="!location.top" class="horizontal"
-  [ngClass]="{'wall':hwall}"
-  (click)="horizontalClick()"></div>
-<div *ngIf="!location.left" class="vertical"
-  [ngClass]="{'wall':vwall}"
-  (click)="verticalClick()"></div>
 </div>

@@ -1,0 +1,11 @@
+.horizontal {
+  position: absolute;
+  width: 40px;
+  height: 10px;
+  outline: 1px solid blue;
+}
+
+
+.wall {
+    background: black
+}
