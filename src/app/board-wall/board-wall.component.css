@@ -1,11 +1,15 @@
 .horizontal {
-  position: absolute;
   width: 90px;
   height: 10px;
-  outline: 1px solid red;
 }
 
+.vertical { 
+  height: 90px;
+  width: 10px;
+}
 
 .wall {
-    background: black
+  position: absolute;
+  background: black;
+  outline: 1px solid red;
 }

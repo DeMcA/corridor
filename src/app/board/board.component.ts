@@ -9,18 +9,20 @@ export class BoardComponent implements OnInit {
 
   squares: Array<number>; // represents the board. 0 if no piece, 1 for player 1, 2 for player2
   currentTurn: number
-  verticalWalls: Array<number> // 0 for no wall, > 0 wall. idx equals if same wall
   horizontalWalls: Array<number>
   horizontalWallSlots: Array<number>
+  verticalWalls: Array<number>
+  verticalWallSlots: Array<number>
   players
 
   selectedPiece: null|string
 
   constructor() {
     this.squares  = Array<number>(81).fill(0);
-    this.verticalWalls  = Array<number>(81).fill(0);
     this.horizontalWalls  = Array<number>(64).fill(0);
     this.horizontalWallSlots = Array<number>(72).fill(0);
+    this.verticalWalls  = Array<number>(64).fill(0);
+    this.verticalWallSlots = Array<number>(72).fill(0);
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;
@@ -65,34 +67,24 @@ export class BoardComponent implements OnInit {
     }
   }
   
-  // TODO: DRY: Should I use a single emitter for wallClick and pass type?
   onHorizontalClicked(sqIdx: number) {
-      // console.log("horizontal wall clicked and received by board", sqIdx)
       if(sqIdx % 9 === 8 ) { sqIdx-- }
       let idx = sqIdx - Math.floor(sqIdx/9)
-      // console.log(idx)
       this.horizontalWalls[idx] = 1; // or wallLabel (or anything truthy)
-      console.log(this.horizontalWalls)
-      // if (this.selectedPiece === "wall") {
-      // this.horizontalWalls[sqIdx] = this.wallLabel
-      // this.horizontalWalls[sqIdx+1] = this.wallLabel
       this.player.walls-- ;
       this.currentTurn++ ;
-      // this.completeTurn();
-      // }
   }
 
+  // TODO: DRY
   onVerticalClicked(sqIdx: number) {
-    if (this.selectedPiece === "wall") {
-      if(sqIdx > 71){ sqIdx = sqIdx - 9 }
+      if(sqIdx % 9 === 8 ) { sqIdx-- }
+      let idx = sqIdx - Math.floor(sqIdx/9)
       if(this.legalVerticalWallMove(sqIdx) ){
-        this.verticalWalls[sqIdx] = this.wallLabel
-        this.verticalWalls[sqIdx+9] = this.wallLabel
+        this.verticalWalls[idx] = 1
         this.player.walls--;
-        this.completeTurn();
+	this.currentTurn++ ;
       }
       else(window.alert("can't go there"))
-    }
   }
 
   // ensure unique index for each wall in wall arrays
@@ -102,11 +94,12 @@ export class BoardComponent implements OnInit {
   }
 
   legalVerticalWallMove(idx){
-    return this.player.walls > 0
-      && !this.verticalWalls[idx]
-      && !this.verticalWalls[idx+9]
-      && !this.horizontalWalls[idx+9]
-      || this.horizontalWalls[idx+9] !== this.horizontalWalls[idx+8]
+  	return true
+  //return this.player.walls > 0
+  //     && !this.verticalWalls[idx]
+  //     && !this.verticalWalls[idx+9]
+  //     && !this.horizontalWalls[idx+9]
+  //     || this.horizontalWalls[idx+9] !== this.horizontalWalls[idx+8]
   }
 
   moveCurrentPlayer(idx) {

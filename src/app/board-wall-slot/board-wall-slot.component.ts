@@ -13,13 +13,19 @@ export class BoardWallSlotComponent implements OnInit {
 
   topDistance: number;
   leftDistance: number;
+  @Input() orientation: string;
 
   constructor() { 
   }
 
   ngOnInit() {
-    this.topDistance = 45+50*Math.floor(this.idx/9);
-    this.leftDistance = 5+50*(this.idx % 9)
+    if ( this.orientation === "horizontal" ) {
+      this.topDistance = 45+50*Math.floor(this.idx/9);
+      this.leftDistance = 5+50*(this.idx % 9)
+    } else if ( this.orientation === "vertical" ) {
+      this.topDistance = 5+50*(this.idx % 9 );
+      this.leftDistance = 45+50*Math.floor(this.idx / 9 )
+    }
   }
 
 
