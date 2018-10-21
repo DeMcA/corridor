@@ -43,6 +43,10 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
   }
 
+  trackByWalls( index: number, wall) {
+    return index
+  }
+
   get player() {
     return (this.players[this.currentTurn%2])
   } 
@@ -63,18 +67,19 @@ export class BoardComponent implements OnInit {
   
   // TODO: DRY: Should I use a single emitter for wallClick and pass type?
   onHorizontalClicked(sqIdx: number) {
-      console.log("horizontal wall clicked and received by board", sqIdx)
+      // console.log("horizontal wall clicked and received by board", sqIdx)
       if(sqIdx % 9 === 8 ) { sqIdx-- }
       let idx = sqIdx - Math.floor(sqIdx/9)
-      console.log(idx)
+      // console.log(idx)
       this.horizontalWalls[idx] = 1; // or wallLabel (or anything truthy)
-    // if (this.selectedPiece === "wall") {
+      console.log(this.horizontalWalls)
+      // if (this.selectedPiece === "wall") {
       // this.horizontalWalls[sqIdx] = this.wallLabel
       // this.horizontalWalls[sqIdx+1] = this.wallLabel
       this.player.walls-- ;
       this.currentTurn++ ;
       // this.completeTurn();
-    // }
+      // }
   }
 
   onVerticalClicked(sqIdx: number) {
