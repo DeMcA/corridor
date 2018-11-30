@@ -6,37 +6,25 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./board-square.component.css']
 })
 export class BoardSquareComponent implements OnInit {
-
   @Input() idx: number;
   @Input() location;
   @Input() player: number;
-  @Input() vwall
 
   @Output() squareClicked = new EventEmitter<number>();
-  @Output() verticalClicked = new EventEmitter<number>();
-  // @Output() pieceClicked = new EventEmitter<number>();
+  @Output() pieceClicked = new EventEmitter<number>();
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   click() {
-    console.log("square clicked")
-    this.squareClicked.emit(this.idx)
+    console.log('square clicked');
+    this.squareClicked.emit(this.idx);
   }
 
-  verticalClick() {
-    console.log("vertical click in square")
-    this.verticalClicked.emit(this.idx)
-  }
-
-
-  // // Don't actually need this for anything, can deduce in board component
+  // Don't actually need this for anything, can deduce in board component
   pieceClick() {
-  //   console.log("click player ", this.player)
-  //   this.pieceClicked(this.player)
+    console.log(`player ${this.player} clicked`);
+    this.pieceClicked.emit(this.player);
   }
-
-
 }
