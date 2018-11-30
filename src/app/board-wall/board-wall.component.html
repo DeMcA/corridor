@@ -1,3 +1,8 @@
-<div [ngStyle]="{'top.px': topDistance, 'left.px': leftDistance}" [ngClass]="{'horizontal': orientation=='horizontal', 'vertical': orientation=='vertical'}" [class.wall]="wall">
-</div>
-
+<div
+  [ngStyle]="{ 'top.px': topDistance, 'left.px': leftDistance }"
+  [ngClass]="{
+    horizontal: orientation == 'horizontal',
+    vertical: orientation == 'vertical'
+  }"
+  [class.wall]="wall"
+></div>

@@ -1,21 +1,49 @@
 <div class="board">
+  <app-board-square
+    *ngFor="let square of squares; let i = index"
+    (squareClicked)="onSquareClicked($event)"
+    (pieceClicked)="onPieceClicked($event)"
+    [idx]="i"
+    [location]="getSquareLocation(i)"
+    [player]="square"
+  ></app-board-square>
 
-<app-board-square *ngFor="let square of squares; let i = index" 
-     (squareClicked)="onSquareClicked($event)"
-     (pieceClicked)="onPieceClicked($event)"
-     [idx]="i" 
-     [location]="getSquareLocation(i)"
-     [player]=square
- ></app-board-square>
+  <app-board-wall
+    *ngFor="let wall of verticalWalls; let i = index; trackBy: trackByWalls"
+    [wall]="verticalWalls[i]"
+    [idx]="i"
+    [orientation]="'vertical'"
+  ></app-board-wall>
 
-	<app-board-wall *ngFor="let wall of verticalWalls; let i = index; trackBy: trackByWalls" [wall]="verticalWalls[i]" [idx]="i" [orientation]="'vertical'"></app-board-wall>
-<app-board-wall-slot (click)="onVerticalClicked(i)" [wall]="slot" *ngFor="let slot of verticalWallSlots; let i = index" [idx]="i" [orientation]="'vertical'" ></app-board-wall-slot >
-<app-board-wall *ngFor="let wall of horizontalWalls; let i = index; trackBy: trackByWalls" [wall]="horizontalWalls[i]" [idx]="i" [orientation]="'horizontal'"></app-board-wall>
-<app-board-wall-slot (click)="onHorizontalClicked(i)" [wall]="slot" *ngFor="let slot of horizontalWallSlots; let i = index; trackBy: trackByWall" [idx]="i" [orientation]="'horizontal'"></app-board-wall-slot>
+  <app-board-wall-slot
+    (click)="onVerticalClicked(i)"
+    [wall]="slot"
+    *ngFor="let slot of verticalWallSlots; let i = index"
+    [idx]="i"
+    [orientation]="'vertical'"
+  ></app-board-wall-slot>
+
+  <app-board-wall
+    *ngFor="let wall of horizontalWalls; let i = index; trackBy: trackByWalls"
+    [wall]="horizontalWalls[i]"
+    [idx]="i"
+    [orientation]="'horizontal'"
+  ></app-board-wall>
+
+  <app-board-wall-slot
+    (click)="onHorizontalClicked(i)"
+    [wall]="slot"
+    *ngFor="
+      let slot of horizontalWallSlots;
+      let i = index;
+      trackBy: trackByWall
+    "
+    [idx]="i"
+    [orientation]="'horizontal'"
+  ></app-board-wall-slot>
 </div>
 
 <button (click)="wallSelectorClicked()">select wall</button>
-<h2> Current Player: Player {{player.key}}</h2>
-<h2> Walls: </h2>
-Player 1: {{players[0].walls}}
-Player 2: {{players[1].walls}}
+<h2>Current Player: Player {{ player.key }}</h2>
+<h2>Walls:</h2>
+Player 1: {{ players[0].walls }} Player 2: {{ players[1].walls }}

@@ -1,4 +1,8 @@
-<div class="square" (click)="click()" >
-<div *ngIf="player" class="piece"
-  [ngClass]="{'player1':player==1,'player2':player==2}" (click)="pieceClick()"></div>
+<div class="square" (click)="click()">
+  <div
+    *ngIf="player"
+    class="piece"
+    [ngClass]="{ player1: player == 1, player2: player == 2 }"
+    (click)="pieceClick()"
+  ></div>
 </div>
