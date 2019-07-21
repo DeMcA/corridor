@@ -16,7 +16,7 @@
   ></app-board-wall>
 
   <app-board-wall-slot
-    (click)="onVerticalClicked(i)"
+    (click)="onWallSlotClicked(i, 'vertical')"
     [wall]="slot"
     *ngFor="let slot of verticalWallSlots; let i = index"
     [idx]="i"
@@ -31,7 +31,7 @@
   ></app-board-wall>
 
   <app-board-wall-slot
-    (click)="onHorizontalClicked(i)"
+    (click)="onWallSlotClicked(i, 'horizontal')"
     [wall]="slot"
     *ngFor="
       let slot of horizontalWallSlots;
@@ -43,7 +43,6 @@
   ></app-board-wall-slot>
 </div>
 
-<button (click)="wallSelectorClicked()">select wall</button>
 <h2>Current Player: Player {{ player.key }}</h2>
 <h2>Walls:</h2>
 Player 1: {{ players[0].walls }} Player 2: {{ players[1].walls }}

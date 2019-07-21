@@ -7,7 +7,6 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 })
 export class BoardWallSlotComponent implements OnInit {
   @Input() idx;
-  // @Output() horizontalClicked = new EventEmitter<number>();
   @Input() wall;
 
   topDistance: number;

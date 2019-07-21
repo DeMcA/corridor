@@ -1,5 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+interface WallArray extends Array<number> {
+  length: 64;
+}
+
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -10,10 +14,9 @@ export class BoardComponent implements OnInit {
   currentTurn: number;
   horizontalWalls: Array<number>;
   horizontalWallSlots: Array<number>;
-  verticalWalls: Array<number>;
+  verticalWalls: WallArray;
   verticalWallSlots: Array<number>;
   players;
-
   selectedPiece: null | string;
 
   constructor() {
@@ -22,8 +25,8 @@ export class BoardComponent implements OnInit {
     this.horizontalWallSlots = Array<number>(72).fill(0);
     // When storing/transferring board state, something like len 10 array
     // or .fill(None) and use coordinate tuples? TODO: document a communication format
-    this.verticalWalls = Array<number>(64).fill(0);
-    this.verticalWallSlots = Array<number>(72).fill(0);
+    this.verticalWalls = <WallArray>Array(64).fill(0);
+    this.verticalWallSlots = <WallArray>Array(72).fill(0);
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;
@@ -52,8 +55,10 @@ export class BoardComponent implements OnInit {
     return this.players[this.currentTurn % 2];
   }
 
-  wallSelectorClicked() {
-    this.selectedPiece = 'wall';
+  // ensure unique index for each wall in wall arrays
+  // Not needed if using separate len 64 wall arrays.
+  get wallLabel() {
+    return this.player.walls * this.player.key;
   }
 
   // Using "onXClicked()" to refer to events from child component
@@ -69,52 +74,53 @@ export class BoardComponent implements OnInit {
   onPieceClicked(playerSqIdx) {
   }
 
-  onHorizontalClicked(slotIdx: number) {
-    if (slotIdx % 9 === 8) {
-      slotIdx--;
-    }
-    const idx = slotIdx - Math.floor(slotIdx / 9);
-    this.horizontalWalls[idx] = 1; // or wallLabel (or anything truthy)
-    this.player.walls--;
-    this.currentTurn++;
-  }
-
-  // TODO: DRY
-  onVerticalClicked(slotIdx: number) {
-    if (slotIdx % 9 === 8) {
-      slotIdx--;
-    }
-    const idx = slotIdx - Math.floor(slotIdx / 9);
-    if (this.legalVerticalWallMove(idx)) {
-      this.verticalWalls[idx] = 1;
-      this.player.walls--;
-      this.currentTurn++;
+  onWallSlotClicked(slotIdx: number, orientation: 'vertical'|'horizontal') {
+    if (this.player.walls < 1) {
+      window.alert('no more walls');
     } else {
-      window.alert('can\'t go there');
+      // If clicking the last square in a row/column, assume we want the previous one
+      if (slotIdx % 9 === 8) {
+        slotIdx--;
+      }
+      const idx = slotIdx - Math.floor(slotIdx / 9); // Convert slot to wall idx
+      let walls, orthWalls;
+      if (orientation === 'vertical') {
+        walls = this.verticalWalls;
+        orthWalls = this.horizontalWalls;
+      } else {
+        orthWalls = this.verticalWalls;
+        walls = this.horizontalWalls;
+      }
+      if (this.legalWallMove(idx, walls, orthWalls)) {
+        walls[idx] = 1;
+        this.player.walls--;
+        this.currentTurn++;
+      } else {
+        window.alert('can\'t go there');
+      }
     }
   }
 
-  // ensure unique index for each wall in wall arrays
-  // Not needed if using separate len 64 wall arrays.
-  get wallLabel() {
-    return this.player.walls * this.player.key;
+  isBlockingOrthWall(i, walls) {
+    const p = i % 8;
+    const q = Math.floor(i / 8);
+    return walls[p * 8 + q];
   }
 
-  legalVerticalWallMove(idx) {
-    console.log(idx, this.horizontalWalls);
-    function verticalToHorizontal(i) {
-      const columnIdx = Math.floor(i / 8);
-      const rowIdx = i % 8;
-      console.log('Column: ', columnIdx, 'Row: ', rowIdx);
-      return idx + 7 * rowIdx - 7 * columnIdx;
-      // console.log("Other idx: ", otherArayIdx);
-    }
-    verticalToHorizontal(idx);
-    return this.player.walls > 0;
-    // && !this.verticalWalls[idx]
-    // && !this.verticalWalls[idx-1]
-    // && !this.horizontalWalls[verticalToHorizontal(idx)]
-    // || this.horizontalWalls[idx+9] !== this.horizontalWalls[idx+8]
+  isBlockingSameWall(i, walls: WallArray) {
+    return walls[i] // already has a wall
+      || ( i % 8 !== 0 && walls[i - 1] ) // wall in slot in front
+      || ( i % 8 !== 7 && walls[i + 1] ); // wall in slot behind
+  }
+
+  // TODO
+  isPathToEnd() {
+  }
+
+  legalWallMove(idx, walls, orthWalls) {
+    return !this.isBlockingOrthWall(idx, orthWalls)
+      && !this.isBlockingSameWall(idx, walls);
+      // && isPathToEnd
   }
 
   moveCurrentPlayer(idx) {
@@ -128,19 +134,8 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  completeTurn() {
-    this.currentTurn++;
-    this.selectedPiece = null;
-    // Might remove piece Selection -> automatically play wall if click on wall and piece if click on square
-  }
-
   // TODO
-  get isLegalPlayerMove() {
-    return true;
-  }
-
-  // TODO
-  get isLegalWallMove() {
+  isLegalPlayerMove() {
     return true;
   }
 
@@ -162,4 +157,11 @@ export class BoardComponent implements OnInit {
     }
     return location;
   }
+
+  completeTurn() {
+    this.currentTurn++;
+    this.selectedPiece = null;
+    // Might remove piece Selection -> automatically play wall if click on wall and piece if click on square
+  }
+
 }
