@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { GraphService } from '../graph.service';
 
 interface WallArray extends Array<number> {
   length: 64;
@@ -17,7 +18,9 @@ export class BoardComponent implements OnInit {
   players;
   selectedPiece: null | string;
 
-  constructor() {
+  constructor(
+    private graph: GraphService
+  ) {
     this.squares = Array<number>(81).fill(0);
     this.horizontalWalls = Array<number>(64).fill(0);
     // When storing/transferring board state, something like len 10 array
@@ -39,6 +42,10 @@ export class BoardComponent implements OnInit {
         position: 76
       }
     ];
+    console.log(this.graph.toCoord(13))
+    console.log(this.graph.toIdx([1, 4]))
+    console.log(this.graph.neigbours(9))
+    console.log(this.graph.neigbours(80))
   }
 
   ngOnInit() {}
@@ -104,7 +111,7 @@ export class BoardComponent implements OnInit {
       || ( i % 8 !== 7 && walls[i + 1] ); // wall in slot behind
   }
 
-  // TODO
+  // TODO (injecrt as a service - construct graphs etc.)
   isPathToEnd() {
     return true;
   }
@@ -126,7 +133,7 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  // TODO
+  // TODO (inject as service)
   isLegalPlayerMove() {
     return true;
   }

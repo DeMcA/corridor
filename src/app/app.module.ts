@@ -5,15 +5,13 @@ import { AppComponent } from './app.component';
 import { BoardComponent } from './board/board.component';
 import { BoardSquareComponent } from './board-square/board-square.component';
 import { BoardWallComponent } from './board-wall/board-wall.component';
-import { BoardWallSlotComponent } from './board-wall-slot/board-wall-slot.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardComponent,
     BoardSquareComponent,
-    BoardWallComponent,
-    BoardWallSlotComponent
+    BoardWallComponent
   ],
   imports: [
     BrowserModule
