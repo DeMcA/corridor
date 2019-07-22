@@ -13,20 +13,16 @@ export class BoardComponent implements OnInit {
   squares: Array<number>; // represents the board. 0 if no piece, 1 for player 1, 2 for player2
   currentTurn: number;
   horizontalWalls: Array<number>;
-  horizontalWallSlots: Array<number>;
   verticalWalls: WallArray;
-  verticalWallSlots: Array<number>;
   players;
   selectedPiece: null | string;
 
   constructor() {
     this.squares = Array<number>(81).fill(0);
     this.horizontalWalls = Array<number>(64).fill(0);
-    this.horizontalWallSlots = Array<number>(72).fill(0);
     // When storing/transferring board state, something like len 10 array
     // or .fill(None) and use coordinate tuples? TODO: document a communication format
     this.verticalWalls = <WallArray>Array(64).fill(0);
-    this.verticalWallSlots = <WallArray>Array(72).fill(0);
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;
@@ -74,15 +70,10 @@ export class BoardComponent implements OnInit {
   onPieceClicked(playerSqIdx) {
   }
 
-  onWallSlotClicked(slotIdx: number, orientation: 'vertical'|'horizontal') {
+  onWallClicked(idx: number, orientation: 'vertical'|'horizontal') {
     if (this.player.walls < 1) {
       window.alert('no more walls');
     } else {
-      // If clicking the last square in a row/column, assume we want the previous one
-      if (slotIdx % 9 === 8) {
-        slotIdx--;
-      }
-      const idx = slotIdx - Math.floor(slotIdx / 9); // Convert slot to wall idx
       let walls, orthWalls;
       if (orientation === 'vertical') {
         walls = this.verticalWalls;
@@ -115,6 +106,7 @@ export class BoardComponent implements OnInit {
 
   // TODO
   isPathToEnd() {
+    return true;
   }
 
   legalWallMove(idx, walls, orthWalls) {

@@ -18,7 +18,7 @@ export class BoardSquareComponent implements OnInit {
   ngOnInit() {}
 
   click() {
-    console.log('square clicked');
+    console.log('square clicked', this.idx);
     this.squareClicked.emit(this.idx);
   }
 

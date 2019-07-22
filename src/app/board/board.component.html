@@ -9,38 +9,21 @@
   ></app-board-square>
 
   <app-board-wall
+    (click)="onWallClicked(i, 'vertical')"
     *ngFor="let wall of verticalWalls; let i = index; trackBy: trackByWalls"
     [wall]="verticalWalls[i]"
     [idx]="i"
     [orientation]="'vertical'"
   ></app-board-wall>
 
-  <app-board-wall-slot
-    (click)="onWallSlotClicked(i, 'vertical')"
-    [wall]="slot"
-    *ngFor="let slot of verticalWallSlots; let i = index"
-    [idx]="i"
-    [orientation]="'vertical'"
-  ></app-board-wall-slot>
-
   <app-board-wall
+    (click)="onWallClicked(i, 'horizontal')"
     *ngFor="let wall of horizontalWalls; let i = index; trackBy: trackByWalls"
     [wall]="horizontalWalls[i]"
     [idx]="i"
     [orientation]="'horizontal'"
   ></app-board-wall>
 
-  <app-board-wall-slot
-    (click)="onWallSlotClicked(i, 'horizontal')"
-    [wall]="slot"
-    *ngFor="
-      let slot of horizontalWallSlots;
-      let i = index;
-      trackBy: trackByWall
-    "
-    [idx]="i"
-    [orientation]="'horizontal'"
-  ></app-board-wall-slot>
 </div>
 
 <h2>Current Player: Player {{ player.key }}</h2>
