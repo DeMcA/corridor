@@ -42,10 +42,6 @@ export class BoardComponent implements OnInit {
         position: 76
       }
     ];
-    console.log(this.graph.toCoord(13))
-    console.log(this.graph.toIdx([1, 4]))
-    console.log(this.graph.neigbours(9))
-    console.log(this.graph.neigbours(80))
   }
 
   ngOnInit() {}
@@ -89,7 +85,7 @@ export class BoardComponent implements OnInit {
         orthWalls = this.verticalWalls;
         walls = this.horizontalWalls;
       }
-      if (this.legalWallMove(idx, walls, orthWalls)) {
+      if (this.legalWallMove(idx, walls, orthWalls, orientation)) {
         walls[idx] = 1;
         this.player.walls--;
         this.currentTurn++;
@@ -116,10 +112,17 @@ export class BoardComponent implements OnInit {
     return true;
   }
 
-  legalWallMove(idx, walls, orthWalls) {
+  legalWallMove(idx, walls, orthWalls, orientation) {
     return !this.isBlockingOrthWall(idx, orthWalls)
-      && !this.isBlockingSameWall(idx, walls);
-      // && isPathToEnd
+      && !this.isBlockingSameWall(idx, walls)
+      && this.pathExistsForPawns(idx, orientation)
+  }
+
+  pathExistsForPawns(idx, orientation) {
+    if (orientation === 'vertical') {
+      return this.graph.placeVerticalWall(idx)
+    }
+    return this.graph.placeHorizontalWall(idx);
   }
 
   moveCurrentPlayer(idx) {
@@ -128,7 +131,13 @@ export class BoardComponent implements OnInit {
       this.squares[this.player.position] = 0;
       this.squares[idx] = this.player.key;
       // Update player information:
-      this.player.position = idx;
+      this.player.position =  idx;
+      // TODO: player reference should work same in service and this componenet
+      if (this.player.key === 1) {
+        this.graph.player.position = idx;
+      } else {
+        this.graph.opponent.position = idx;
+      }
       this.completeTurn();
     }
   }
