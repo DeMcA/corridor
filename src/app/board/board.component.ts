@@ -13,7 +13,7 @@ interface WallArray extends Array<number> {
 export class BoardComponent implements OnInit {
   squares: Array<number>; // represents the board. 0 if no piece, 1 for player 1, 2 for player2
   currentTurn: number;
-  horizontalWalls: Array<number>;
+  horizontalWalls: WallArray;
   verticalWalls: WallArray;
   players;
   selectedPiece: null | string;
@@ -21,8 +21,8 @@ export class BoardComponent implements OnInit {
   constructor(
     private graph: GraphService
   ) {
-    this.squares = Array<number>(81).fill(0);
-    this.horizontalWalls = Array<number>(64).fill(0);
+    this.squares = Array(81).fill(0);
+    this.horizontalWalls = <WallArray>Array(64).fill(0);
     // When storing/transferring board state, something like len 10 array
     // or .fill(None) and use coordinate tuples? TODO: document a communication format
     this.verticalWalls = <WallArray>Array(64).fill(0);
