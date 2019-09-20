@@ -4,3 +4,18 @@
     height: 450px;
     background: grey;
 }
+
+.player1 {
+  color: lightblue;
+  margin-right: 10px;
+}
+
+.player2 {
+  color: red;
+  margin-right: 10px;
+}
+
+.errormessage {
+  color: orange;
+  margin-top: 10px;
+}

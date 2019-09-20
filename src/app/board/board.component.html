@@ -3,8 +3,9 @@
     *ngFor="let square of squares; let i = index"
     (squareClicked)="onSquareClicked($event)"
     [idx]="i"
-    [location]="getSquareLocation(i)"
+    [connectivity]="getSquareConnections(i)"
     [player]="square"
+    [pawnToMove]="pawnToMove"
   ></app-board-square>
 
   <app-board-wall
@@ -25,6 +26,15 @@
 
 </div>
 
-<h2>Current Player: Player {{ player.key }}</h2>
-<h2>Walls:</h2>
-Player 1: {{ players[0].walls }} Player 2: {{ players[1].walls }}
+<div class="errormessage">
+  {{ errorMessage }}
+</div>
+<h4>Current Player: </h4>
+<div [ngClass]="{ player1: currentTurn % 2 == 0, player2: currentTurn % 2 == 1}" >
+  Player {{ player.key }}
+</div>
+<h4>Walls:</h4>
+<div><span class="player1">Player 1:</span>{{ players[0].walls }}</div>
+<div><span class="player2">Player 2:</span>{{ players[1].walls }}</div>
+<h4>Turn</h4>
+{{ currentTurn }}

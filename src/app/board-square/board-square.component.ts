@@ -7,8 +7,10 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 })
 export class BoardSquareComponent implements OnInit {
   @Input() idx: number;
-  @Input() location;
+  @Input() connectivity: number[];
   @Input() player: number;
+  @Input() pawnToMove: number;
+  debug = true;
 
   @Output() squareClicked = new EventEmitter<number>();
 

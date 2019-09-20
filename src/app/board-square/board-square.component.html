@@ -2,21 +2,23 @@
   <div
     *ngIf="player"
     class="piece"
-    [ngClass]="{ player1: player == 1, player2: player == 2 }"
-  >
-  <div style="font-size: 9px">
-    {{location}}
-  </div>
+    [ngClass]="{ player1: player == 1, player2: player == 2, tomove: idx == pawnToMove}"
+    >
+    <div *ngIf="debug">
+      <div style="font-size: 9px">
+        {{connectivity}}
+      </div>
     {{idx}}
-</div>
-<div>
-  <div
-    *ngIf="!player"
-    style="font-size: 9px">
-    {{location}}
+    </div>
   </div>
-  <div *ngIf="!player">
-    {{idx}}
+  <div>
+    <div *ngIf="!player && debug">
+      <div style="font-size: 9px">
+        {{connectivity}}
+      </div>
+      <div>
+        {{idx}}
+      </div>
+    </div>
   </div>
-</div>
 </div>

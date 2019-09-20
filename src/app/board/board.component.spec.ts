@@ -6,8 +6,9 @@ import { BoardComponent } from './board.component';
 @Component({selector: 'app-board-square', template: ''})
 class BoardSquareStubComponent {
   @Input() idx: number;
-  @Input() location;
+  @Input() pawnToMove;
   @Input() player: number;
+  @Input() connectivity: number[];
   @Output() squareClicked = new EventEmitter<number>();
 }
 

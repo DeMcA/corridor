@@ -16,6 +16,7 @@ export class BoardComponent implements OnInit {
   horizontalWalls: WallArray;
   verticalWalls: WallArray;
   players;
+  errorMessage: string | null;
 
   constructor(
     private graph: GraphService
@@ -32,12 +33,14 @@ export class BoardComponent implements OnInit {
       {
         key: 1,
         walls: 10,
-        position: 4
+        position: 4,
+        hasWon: (pos: number) => pos > 70
       },
       {
         key: 2,
         walls: 10,
-        position: 76
+        position: 76,
+        hasWon: (pos: number) => pos < 9,
       }
     ];
   }
@@ -58,6 +61,10 @@ export class BoardComponent implements OnInit {
     return this.player.walls * this.player.key;
   }
 
+  get pawnToMove() {
+    return this.players[this.currentTurn % 2].position;
+  }
+
   // Using "onXClicked()" to refer to events from child component
   onSquareClicked(sqIdx: number) {
     this.moveCurrentPlayer(sqIdx);
@@ -65,7 +72,7 @@ export class BoardComponent implements OnInit {
 
   onWallClicked(idx: number, orientation: 'vertical'|'horizontal') {
     if (this.player.walls < 1) {
-      window.alert('no more walls');
+      this.illegalMoveAction('no more walls');
     } else {
       let walls, orthWalls;
       if (orientation === 'vertical') {
@@ -80,7 +87,7 @@ export class BoardComponent implements OnInit {
         this.player.walls--;
         this.currentTurn++;
       } else {
-        window.alert('can\'t go there');
+        this.illegalMoveAction('can\'t go there');
       }
     }
   }
@@ -116,7 +123,7 @@ export class BoardComponent implements OnInit {
   }
 
   moveCurrentPlayer(idx) {
-    if (this.isLegalPlayerMove) {
+    if (this.isLegalPlayerMove(idx)) {
       // Update sqaures array with new position:
       this.squares[this.player.position] = 0;
       this.squares[idx] = this.player.key;
@@ -124,45 +131,40 @@ export class BoardComponent implements OnInit {
       this.player.position =  idx;
       // TODO: player reference should work same in service and this componenet
       if (this.player.key === 1) {
-        this.graph.player.position = idx;
+        this.graph.player = this.player;
       } else {
-        this.graph.opponent.position = idx;
+        // TODO: make this nicer
+        this.graph.opponent = this.players[1];
       }
       this.completeTurn();
+    } else {
+      this.illegalMoveAction('Can\'t move player there');
     }
   }
 
-  // TODO (inject as service)
-  isLegalPlayerMove() {
-    return true;
+  isLegalPlayerMove(newSquareIdx: number) {
+    if (this.graph.edges[this.player.position].indexOf(newSquareIdx) > -1) {
+      return true;
+    }
+    return false;
   }
 
-  getSquareLocation(idx) {
+  // for debugging
+  getSquareConnections(idx) {
     const arr = this.graph.edges[idx];
 if (arr.length > 3) {
     return JSON.stringify(arr.slice(0,2))+'\n'+JSON.stringify(arr.slice(2,arr.length));
 }
     return JSON.stringify(arr)
-    // const location = { top: false, bottom: false, left: false, right: false };
-    // if (idx % 9 === 0) {
-    //   location.left = true;
-    // }
-    // if (idx % 8 === 0) {
-    //   location.right = true;
-    // }
-    // if (idx < 9) {
-    //   location.top = true;
-    //   return location;
-    // }
-    // if (idx > 71) {
-    //   location.bottom = true;
-    //   return location;
-    // }
-    // return location;
   }
 
   completeTurn() {
     this.currentTurn++;
+  }
+
+  illegalMoveAction(message: string) {
+    this.errorMessage = message;
+    setTimeout(() => this.errorMessage = null, 1000);
   }
 
 }

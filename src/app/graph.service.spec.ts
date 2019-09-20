@@ -50,4 +50,23 @@ describe('GraphService', () => {
     expect(service.isPathToEnd(service.opponent)).toEqual(true);
   })
 
+  it('isWallBetween', () => {
+    expect(service.isWallBetween(4,5)).toEqual(false);
+    service.opponent.position = 5;
+    expect(service.isWallBetween(4,5)).toEqual(false);
+    service.placeVerticalWall(24, false);
+    expect(service.isWallBetween(4,5)).toEqual(false);
+    service.placeVerticalWall(32, false);
+    expect(service.isWallBetween(4,5)).toEqual(true);
+  })
+
+  it('areWallsAdjacent', () => {
+    service.opponent.position = 5;
+    expect(service.areSquaresAdjacent(4,5)).toEqual(true);
+    service.placeVerticalWall(24, false);
+    expect(service.areSquaresAdjacent(4,5)).toEqual(true);
+    service.placeVerticalWall(32, false);
+    expect(service.areSquaresAdjacent(4,5)).toEqual(false);
+  })
+
 });
