@@ -55,7 +55,7 @@ export class GraphService {
   /**
    * Removes edges between two sets of two nodes i -> j, j->i, k->l and l->k
    * but only if the resulting graph is legal, i.e. both pawns still have a path
-   * to their opponenets end
+   * to their opponents end
    */
   private placeWall(i, j, k, l) {
     // need a deep copy of this.edges, so we can revert if the wall placement was illegal
@@ -93,7 +93,7 @@ export class GraphService {
   }
 
   /**
-   * Return Array of indexes of neighbouring nodes in the inital graph
+   * Return Array of indexes of neighbouring nodes in the initial graph
    */
   neighbours(node: number): number[] {
     const moves = [];

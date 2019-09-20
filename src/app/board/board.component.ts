@@ -16,7 +16,6 @@ export class BoardComponent implements OnInit {
   horizontalWalls: WallArray;
   verticalWalls: WallArray;
   players;
-  selectedPiece: null | string;
 
   constructor(
     private graph: GraphService
@@ -29,7 +28,6 @@ export class BoardComponent implements OnInit {
     this.squares[4] = 1;
     this.squares[76] = 2;
     this.currentTurn = 0;
-    this.selectedPiece = null;
     this.players = [
       {
         key: 1,
@@ -62,15 +60,7 @@ export class BoardComponent implements OnInit {
 
   // Using "onXClicked()" to refer to events from child component
   onSquareClicked(sqIdx: number) {
-    if (this.selectedPiece === 'player') {
-      this.moveCurrentPlayer(sqIdx);
-    } else if (sqIdx === this.player.position) {
-      this.selectedPiece = 'player';
-    }
-  }
-
-  // TODO don't need this as using this.selectedPiece to determine course of action on onSquareClicked
-  onPieceClicked(playerSqIdx) {
+    this.moveCurrentPlayer(sqIdx);
   }
 
   onWallClicked(idx: number, orientation: 'vertical'|'horizontal') {
@@ -168,8 +158,6 @@ export class BoardComponent implements OnInit {
 
   completeTurn() {
     this.currentTurn++;
-    this.selectedPiece = null;
-    // Might remove piece Selection -> automatically play wall if click on wall and piece if click on square
   }
 
 }

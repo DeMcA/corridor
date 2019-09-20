@@ -9,7 +9,6 @@ class BoardSquareStubComponent {
   @Input() location;
   @Input() player: number;
   @Output() squareClicked = new EventEmitter<number>();
-  @Output() pieceClicked = new EventEmitter<number>();
 }
 
 @Component({selector: 'app-board-wall', template: ''})

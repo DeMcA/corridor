@@ -11,7 +11,6 @@ export class BoardSquareComponent implements OnInit {
   @Input() player: number;
 
   @Output() squareClicked = new EventEmitter<number>();
-  @Output() pieceClicked = new EventEmitter<number>();
 
   constructor() {}
 
@@ -22,9 +21,4 @@ export class BoardSquareComponent implements OnInit {
     this.squareClicked.emit(this.idx);
   }
 
-  // Don't actually need this for anything, can deduce in board component
-  pieceClick() {
-    console.log(`player ${this.player} clicked`);
-    this.pieceClicked.emit(this.player);
-  }
 }
