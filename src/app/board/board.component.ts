@@ -138,22 +138,27 @@ export class BoardComponent implements OnInit {
   }
 
   getSquareLocation(idx) {
-    const location = { top: false, bottom: false, left: false, right: false };
-    if (idx % 9 === 0) {
-      location.left = true;
-    }
-    if (idx % 8 === 0) {
-      location.right = true;
-    }
-    if (idx < 9) {
-      location.top = true;
-      return location;
-    }
-    if (idx > 71) {
-      location.bottom = true;
-      return location;
-    }
-    return location;
+    const arr = this.graph.edges[idx];
+if (arr.length > 3) {
+    return JSON.stringify(arr.slice(0,2))+'\n'+JSON.stringify(arr.slice(2,arr.length));
+}
+    return JSON.stringify(arr)
+    // const location = { top: false, bottom: false, left: false, right: false };
+    // if (idx % 9 === 0) {
+    //   location.left = true;
+    // }
+    // if (idx % 8 === 0) {
+    //   location.right = true;
+    // }
+    // if (idx < 9) {
+    //   location.top = true;
+    //   return location;
+    // }
+    // if (idx > 71) {
+    //   location.bottom = true;
+    //   return location;
+    // }
+    // return location;
   }
 
   completeTurn() {
