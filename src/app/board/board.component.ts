@@ -137,25 +137,6 @@ export class BoardComponent implements OnInit {
     return true;
   }
 
-  getSquareLocation(idx) {
-    const location = { top: false, bottom: false, left: false, right: false };
-    if (idx % 9 === 0) {
-      location.left = true;
-    }
-    if (idx % 8 === 0) {
-      location.right = true;
-    }
-    if (idx < 9) {
-      location.top = true;
-      return location;
-    }
-    if (idx > 71) {
-      location.bottom = true;
-      return location;
-    }
-    return location;
-  }
-
   completeTurn() {
     this.currentTurn++;
   }

@@ -3,7 +3,6 @@
     *ngFor="let square of squares; let i = index"
     (squareClicked)="onSquareClicked($event)"
     [idx]="i"
-    [location]="getSquareLocation(i)"
     [player]="square"
   ></app-board-square>
 
