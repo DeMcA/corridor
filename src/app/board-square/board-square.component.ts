@@ -10,7 +10,7 @@ export class BoardSquareComponent {
   @Input() connectivity: number[];
   @Input() player: number;
   @Input() pawnToMove: number;
-  debug = true;
+  debug = false;
 
   @Output() squareClicked = new EventEmitter<number>();
 

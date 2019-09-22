@@ -104,11 +104,6 @@ export class BoardComponent implements OnInit {
       || ( i % 8 !== 7 && walls[i + 1] ); // wall in slot behind
   }
 
-  // TODO (injecrt as a service - construct graphs etc.)
-  isPathToEnd() {
-    return true;
-  }
-
   legalWallMove(idx, walls, orthWalls, orientation) {
     return !this.isBlockingOrthWall(idx, orthWalls)
       && !this.isBlockingSameWall(idx, walls)
@@ -136,7 +131,7 @@ export class BoardComponent implements OnInit {
         // TODO: make this nicer
         this.graph.opponent = this.players[1];
       }
-      this.completeTurn();
+      this.currentTurn++;
     } else {
       this.illegalMoveAction('Can\'t move player there');
     }
@@ -152,14 +147,10 @@ export class BoardComponent implements OnInit {
   // for debugging
   getSquareConnections(idx) {
     const arr = this.graph.edges[idx];
-if (arr.length > 3) {
-    return JSON.stringify(arr.slice(0,2))+'\n'+JSON.stringify(arr.slice(2,arr.length));
-}
+    if (arr.length > 3) {
+      return JSON.stringify(arr.slice(0,2))+'\n'+JSON.stringify(arr.slice(2,arr.length));
+    }
     return JSON.stringify(arr)
-  }
-
-  completeTurn() {
-    this.currentTurn++;
   }
 
   illegalMoveAction(message: string) {
