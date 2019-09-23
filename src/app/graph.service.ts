@@ -1,4 +1,4 @@
-import { Injectable, Optional } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 
 interface Player {
   key: number;
@@ -21,7 +21,7 @@ export class GraphService {
   verticalWalls = new Array(81).fill(0);
   horizontalWalls = new Array(81).fill(0);
 
-  constructor( @Optional()players?: Player[]) {
+  constructor( @Optional() @Inject('players') players?: Player[]) {
     this.edges = [];
     for (let i = 0; i < 81; i++) {
       this.edges.push(this.neighbours(i));
@@ -65,7 +65,7 @@ export class GraphService {
   }
 
   isSquareAdjacentToPawn (newSqIdx: number, existingPawn: number) {
-    return this.edges[existingPawn].indexOf(newSqIdx) > -1 
+    return this.edges[existingPawn].indexOf(newSqIdx) > -1
   }
 
   /**
@@ -208,7 +208,7 @@ export class GraphService {
   private placeWall(i, j, k, l, checkPath = true) {
     // need a deep copy of this.edges, so we can revert if the wall placement was illegal
     let edges = checkPath && this.edges.map(x => ([...x]));
-    // remove jumps if wall is between 
+    // remove jumps if wall is between
     this.updateJumpsOnWallPlacement();
     this.removeEdge(i, j)
     this.removeEdge(k, l)
