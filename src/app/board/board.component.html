@@ -27,14 +27,19 @@
 </div>
 
 <div class="errormessage">
-  {{ errorMessage }}
+  {{ errorMessage }} &nbsp;
 </div>
 <h4>Current Player: </h4>
-<div [ngClass]="{ player1: currentTurn % 2 == 0, player2: currentTurn % 2 == 1}" >
+<div class="player" [ngClass]="{ player1: currentTurn % 2 == 0, player2: currentTurn % 2 == 1}" >
   Player {{ player.key }}
 </div>
-<h4>Walls:</h4>
-<div><span class="player1">Player 1:</span>{{ players[0].walls }}</div>
-<div><span class="player2">Player 2:</span>{{ players[1].walls }}</div>
-<h4>Turn</h4>
-{{ currentTurn }}
+<div>
+  <div class="piece pawn1"></div>
+  <p class="playerinfo ">Player 1 - Walls: {{ players[0].walls }}</p>
+</div>
+
+<div>
+  <div class="piece pawn2"></div>
+  <p class="playerinfo">Player 2 - Walls: {{ players[1].walls }}</p>
+</div>
+<h4>Turn: </h4> {{ currentTurn + 1 }}

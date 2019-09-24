@@ -5,22 +5,59 @@
     background: grey;
 }
 
+.playerinfo {
+    margin-left: 10px;
+    position: relative;
+    display: inline-block;
+    line-height: 1.6em;
+    height: 1.6em;
+}
+
+.pawn1 {
+    background: blue;
+}
+
+.pawn2 {
+    background: red;
+}
+
 .player1 {
-  color: blue;
-  margin-right: 10px;
+    color: blue;
 }
 
 .player2 {
-  color: red;
-  margin-right: 10px;
+    color: red;
+}
+
+.player {
+    display: inline-block;
+    margin-left: 1em;
+}
+
+.piece {
+    width: 1.6em;
+    height: 1.6em;
+    -webkit-border-radius: 0.8em;
+    -moz-border-radius: 0.8em;
+    border-radius: 0.8em;
+    /* top: 2px; */
+    /* left: 2px; */
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .errormessage {
-  color: orange;
-  margin-top: 10px;
+    color: orange;
+    margin-top: 10px;
 }
 
 h4 {
     margin-top: 1.33em;
+    margin-bottom: 0.66em;
+    display: inline-block;
+}
+
+p {
+    margin-top: 0.66em;
     margin-bottom: 0.66em;
 }
