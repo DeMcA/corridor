@@ -37,9 +37,9 @@
   <div class="piece pawn1"></div>
   <p class="playerinfo ">Player 1 - Walls: {{ players[0].walls }}</p>
 </div>
-
 <div>
   <div class="piece pawn2"></div>
   <p class="playerinfo">Player 2 - Walls: {{ players[1].walls }}</p>
 </div>
 <h4>Turn: </h4> {{ currentTurn + 1 }}
+<button (click)="undoLastMove()">Undo</button>

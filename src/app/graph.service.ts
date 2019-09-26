@@ -1,10 +1,17 @@
 import { Injectable, Optional, Inject } from '@angular/core';
 
-interface Player {
+export interface Player {
   key: number;
   position: number;
-  remainingWalls: number;
+  walls: number;
   hasWon: (x: number) => boolean;
+}
+interface GraphState {
+  verticalWalls: number[];
+  horizontalWalls: number[];
+  edges: number[][];
+  player?: Player,
+  opponent?: Player,
 }
 
 @Injectable({
@@ -20,6 +27,7 @@ export class GraphService {
   // Note using 9x9 to make node checks easier. Don't have to check gaps since this is done in Board
   verticalWalls = new Array(81).fill(0);
   horizontalWalls = new Array(81).fill(0);
+  graphHistory: GraphState[] = new Array();
 
   constructor( @Optional() @Inject('players') players?: Player[]) {
     this.edges = [];
@@ -33,13 +41,13 @@ export class GraphService {
       this._player = {
         key: 1,
         position: 4,
-        remainingWalls: 10,
+        walls: 10,
         hasWon: (pos: number) => pos > 70
       };
       this._opponent = {
         key: 2,
         position: 76,
-        remainingWalls: 10,
+        walls: 10,
         hasWon: (pos: number) => pos < 9,
       }
     }
@@ -50,16 +58,16 @@ export class GraphService {
   get opponent() {return this._opponent};
 
   /**
-   * Assumes player is a legal Player object and player.position is accessible from curent position
+   * Assumes player is a legal Player object and player.position is accessible from current position
    */
   set player(player) {
-    console.log("setting player to: ", player)
+    this.graphHistory.push(this.createGraphSate());
     this.updateJumpsOnPawnMove(player.position, this.player.position, this.opponent.position)
-    this._player = Object.assign({}, player);
+    this._player = Object.assign({}, player); // TODO: doing this again in createGraphSate
   }
 
   set opponent(opponent) {
-    console.log("setting opponent to: ", opponent)
+    this.graphHistory.push(this.createGraphSate());
     this.updateJumpsOnPawnMove(opponent.position, this.opponent.position, this.player.position)
     this._opponent = Object.assign({}, opponent);
   }
@@ -120,7 +128,7 @@ export class GraphService {
       arr.splice(idx, 1);
     }
 
-    // helper to check the sqaure being jumped actually has an edge to the destination square
+    // helper to check the square being jumped actually has an edge to the destination square
     // (might not if at side of board or there are walls in the way)
     const addTheJump = (toSq) =>  {
       if (this.edges[jumpSq].indexOf(toSq) > -1) {
@@ -164,39 +172,41 @@ export class GraphService {
     // can do simpler adjacency check to new position since jumps have already been reset
     if (this.isSquareAdjacentToPawn(newSq, oppSq)) {
       // now add any jumps to the occupied squares accounting for walls behind
-      // (can't be walls inbetween)
+      // (can't be walls in between)
       this.addJumps(newSq, oppSq)
       this.addJumps(oppSq, newSq)
     }
   }
 
   placeHorizontalWall(idx: number, checkPath = true) {
+    const state = this.createGraphSate();
     // walls are 8x8 in Board and nodes 9x9, so indexes will be out by a row
     const row = Math.floor(idx/8);
-    // create backup since we only want this.horizontalWalls mutated if placement is legal
-    // do want mutated this.horizontalWalls during check
-    const horizontalWalls = this.horizontalWalls.map(x => x);
     this.horizontalWalls[idx+row] = 1;
     this.horizontalWalls[idx+row+1] = 1;
     if (this.placeWall(idx+row, idx+row+9, idx+row+1, idx+row+10, checkPath)) {
+      this.graphHistory.push(state);
       return true;
     }
-    this.horizontalWalls = horizontalWalls;
+    // restore from previous state since we only want this.horizontalWalls mutated if placement is legal
+    this.horizontalWalls = state.horizontalWalls;
     return false;
   };
 
   placeVerticalWall(idx: number, checkPath = true) {
+    const state = this.createGraphSate();
     // verticals walls is 8x8 grid, indexes are orthogonal
     const row = idx % 8;
     const col = Math.floor(idx/8);
     const x = 9 * row + col;
-    const verticalWalls = this.verticalWalls.map(x => x);
     this.verticalWalls[idx+col] = 1;
     this.verticalWalls[idx+col+1] = 1;
+
     if (this.placeWall(x, x+1, x+9, x+10, checkPath)) {
+      this.graphHistory.push(state); 
       return true;
     }
-    this.verticalWalls = verticalWalls
+    this.verticalWalls = state.verticalWalls;
     return false;
   };
 
@@ -216,9 +226,19 @@ export class GraphService {
       this.edges = edges;
       return false;
     }
+
     return true;
   };
 
+  private createGraphSate() {
+    return {
+      verticalWalls: this.verticalWalls.map(x => x),
+      horizontalWalls: this.horizontalWalls.map(x => x),
+      edges: this.edges.map(x => ([...x])),
+      player: Object.assign({}, this._player),
+      opponent: Object.assign({}, this._opponent),
+    }
+  }
 
   updateJumpsOnWallPlacement(){
     this.removeJumps(this.opponent.position);
@@ -269,6 +289,19 @@ export class GraphService {
     if (node > 8) { moves.push(node - 9); }
     if (node < 72) { moves.push(node + 9); }
     return moves;
+  }
+
+  private recreateGraph(graphState: GraphState) {
+    this._player = graphState.player;
+    this._opponent = graphState.opponent;
+    this.verticalWalls = graphState.verticalWalls
+    this.horizontalWalls = graphState.horizontalWalls
+    this.edges = graphState.edges
+  }
+
+  public undoLastMove() {
+    this.recreateGraph(this.graphHistory.pop());
+    // this.recreateGraph(this.opponent, this.player, this.graphHistory.pop())
   }
 
 }

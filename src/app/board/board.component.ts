@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GraphService } from '../graph.service';
+import { GraphService, Player } from '../graph.service';
 
 interface WallArray extends Array<number> {
   length: 64;
@@ -17,6 +17,7 @@ export class BoardComponent implements OnInit {
   verticalWalls: WallArray;
   players;
   errorMessage: string | null;
+  history: Array<Array<number>|string> = []; // Either [fromIdx, toIdx] or 'v'Idx / 'h'Idx
 
   constructor(
     private graph: GraphService
@@ -51,8 +52,12 @@ export class BoardComponent implements OnInit {
     return index;
   }
 
-  get player() {
+  get player(): Player {
     return this.players[this.currentTurn % 2];
+  }
+
+  get opponent(): Player {
+    return this.players[this.currentTurn % 2 ^ 1];
   }
 
   // ensure unique index for each wall in wall arrays
@@ -84,6 +89,7 @@ export class BoardComponent implements OnInit {
       }
       if (this.legalWallMove(idx, walls, orthWalls, orientation)) {
         walls[idx] = 1;
+        this.history.push(orientation[0]+idx)
         this.player.walls--;
         this.currentTurn++;
       } else {
@@ -119,6 +125,7 @@ export class BoardComponent implements OnInit {
 
   moveCurrentPlayer(idx) {
     if (this.isLegalPlayerMove(idx)) {
+      this.history.push([this.player.position, idx]);
       // Update sqaures array with new position:
       this.squares[this.player.position] = 0;
       this.squares[idx] = this.player.key;
@@ -129,7 +136,7 @@ export class BoardComponent implements OnInit {
         this.graph.player = this.player;
       } else {
         // TODO: make this nicer
-        this.graph.opponent = this.players[1];
+        this.graph.opponent = this.player
       }
       this.currentTurn++;
     } else {
@@ -156,6 +163,26 @@ export class BoardComponent implements OnInit {
   illegalMoveAction(message: string) {
     this.errorMessage = message;
     setTimeout(() => this.errorMessage = null, 1000);
+  }
+
+  undoLastMove() {
+    const lastMove = this.history.pop();
+    // currently adding array ofr [from, to] or wallplacement string to history. Might change
+    if (typeof lastMove === 'object') {
+      const [prevSqIdx, lastMoveSqIdx] = lastMove;
+      this.opponent.position = prevSqIdx; // set player from previous turn to previous position
+      this.squares[prevSqIdx] = this.opponent.key; // go back to previous square
+      this.squares[lastMoveSqIdx] = 0; // remove the player from the square it moved to
+    } else {
+      this.player.walls++;
+      if (lastMove[0] === 'v') {
+        this.verticalWalls[lastMove.slice(1)] = 0;
+      } else if (lastMove[0] === 'h') {
+        this.horizontalWalls[lastMove.slice(1)] = 0;
+      }
+    }
+    this.graph.undoLastMove();
+    this.currentTurn--;
   }
 
 }

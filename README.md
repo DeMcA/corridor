@@ -5,7 +5,7 @@ It has since been ported to Angular 8.
 
 ## Deployment
 Run `ng deploy`
-The site is (temporarily) hosted at http://angularcorridor.s3-website-eu-west-1.amazonaws.com/
+The site is (temporarily) hosted at <http://angularcorridor.s3-website-eu-west-1.amazonaws.com/>
 
 ## Development server
 
