@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { GraphService, Player } from '../graph.service';
+import { Component, OnInit, Input, NgZone  } from '@angular/core';
+import { GraphService, Player} from '../graph.service';
 
 interface WallArray extends Array<number> {
   length: 64;
@@ -15,12 +15,14 @@ export class BoardComponent implements OnInit {
   currentTurn: number;
   horizontalWalls: WallArray;
   verticalWalls: WallArray;
-  players;
-  errorMessage: string | null;
+  players: Player[];
+  infoMessage: string | null;
   history: Array<Array<number>|string> = []; // Either [fromIdx, toIdx] or 'v'Idx / 'h'Idx
+  gameOver = false;
 
   constructor(
-    private graph: GraphService
+    private graph: GraphService,
+    private zone: NgZone
   ) {
     this.squares = Array(81).fill(0);
     this.horizontalWalls = <WallArray>Array(64).fill(0);
@@ -72,10 +74,11 @@ export class BoardComponent implements OnInit {
 
   // Using "onXClicked()" to refer to events from child component
   onSquareClicked(sqIdx: number) {
-    this.moveCurrentPlayer(sqIdx);
+    this.gameOver || this.moveCurrentPlayer(sqIdx);
   }
 
   onWallClicked(idx: number, orientation: 'vertical'|'horizontal') {
+    if (this.gameOver) return;
     if (this.player.walls < 1) {
       this.illegalMoveAction('no more walls');
     } else {
@@ -126,6 +129,10 @@ export class BoardComponent implements OnInit {
   moveCurrentPlayer(idx) {
     if (this.isLegalPlayerMove(idx)) {
       this.history.push([this.player.position, idx]);
+      if (this.player.hasWon(idx)) {
+        this.gameOver = true;
+        this.infoMessage = `Player ${this.player.key} has won`;
+      }
       // Update sqaures array with new position:
       this.squares[this.player.position] = 0;
       this.squares[idx] = this.player.key;
@@ -161,11 +168,15 @@ export class BoardComponent implements OnInit {
   }
 
   illegalMoveAction(message: string) {
-    this.errorMessage = message;
-    setTimeout(() => this.errorMessage = null, 1000);
+    this.infoMessage = message;
+    setTimeout(() => this.infoMessage = null, 1000);
   }
 
   undoLastMove() {
+    if (this.gameOver) {
+      this.gameOver = false;
+      this.infoMessage = null;
+    }
     const lastMove = this.history.pop();
     // currently adding array ofr [from, to] or wallplacement string to history. Might change
     if (typeof lastMove === 'object') {
@@ -183,6 +194,13 @@ export class BoardComponent implements OnInit {
     }
     this.graph.undoLastMove();
     this.currentTurn--;
+  }
+
+  // TODO: should be a cleaner way of Refreshing without hard reload
+  resetPage() {
+    this.zone.runOutsideAngular(() => {
+      location.reload();
+    });
   }
 
 }

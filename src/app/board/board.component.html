@@ -27,12 +27,13 @@
 </div>
 
 <div class="errormessage">
-  {{ errorMessage }} &nbsp;
+  {{ infoMessage }} &nbsp;
 </div>
 <h4>Current Player: </h4>
-<div class="player" [ngClass]="{ player1: currentTurn % 2 == 0, player2: currentTurn % 2 == 1}" >
+<div *ngIf="!gameOver" class="player" [ngClass]="{ player1: currentTurn % 2 == 0, player2: currentTurn % 2 == 1}" >
   Player {{ player.key }}
 </div>
+<div *ngIf="gameOver" class="player">N/A</div>
 <div>
   <div class="piece pawn1"></div>
   <p class="playerinfo ">Player 1 - Walls: {{ players[0].walls }}</p>
@@ -43,3 +44,4 @@
 </div>
 <h4>Turn: </h4> {{ currentTurn + 1 }}
 <button (click)="undoLastMove()">Undo</button>
+<button *ngIf="gameOver" (click)="resetPage()">Reset</button>
