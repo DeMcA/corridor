@@ -173,6 +173,7 @@ export class BoardComponent implements OnInit {
   }
 
   undoLastMove() {
+    if (this.history.length === 0) return
     if (this.gameOver) {
       this.gameOver = false;
       this.infoMessage = null;
