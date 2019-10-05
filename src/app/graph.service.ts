@@ -219,9 +219,9 @@ export class GraphService {
     // need a deep copy of this.edges, so we can revert if the wall placement was illegal
     let edges = checkPath && this.edges.map(x => ([...x]));
     // remove jumps if wall is between
-    this.updateJumpsOnWallPlacement();
     this.removeEdge(i, j)
     this.removeEdge(k, l)
+    this.updateJumpsOnWallPlacement();
     if (checkPath && this.wallBlocksPath()){
       this.edges = edges;
       return false;
