@@ -9,5 +9,5 @@
 
 ## Bugs
 
-* Undo function incorrectly allocates walls
-* additional square on P1 win row
+* [X] Undo function incorrectly allocates walls
+* [X] additional square on P1 win row

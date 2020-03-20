@@ -37,7 +37,7 @@ export class BoardComponent implements OnInit {
         key: 1,
         walls: 10,
         position: 4,
-        hasWon: (pos: number) => pos > 70
+        hasWon: (pos: number) => pos > 71
       },
       {
         key: 2,
@@ -186,7 +186,7 @@ export class BoardComponent implements OnInit {
       this.squares[prevSqIdx] = this.opponent.key; // go back to previous square
       this.squares[lastMoveSqIdx] = 0; // remove the player from the square it moved to
     } else {
-      this.player.walls++;
+      this.opponent.walls++;
       if (lastMove[0] === 'v') {
         this.verticalWalls[lastMove.slice(1)] = 0;
       } else if (lastMove[0] === 'h') {

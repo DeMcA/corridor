@@ -10,8 +10,8 @@ interface GraphState {
   verticalWalls: number[];
   horizontalWalls: number[];
   edges: number[][];
-  player?: Player,
-  opponent?: Player,
+  player?: Player;
+  opponent?: Player;
 }
 
 @Injectable({
